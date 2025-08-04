@@ -26,8 +26,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TranslatorAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    TranslateView(vm)
+                Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+                    TranslateView(vm,paddingValues)
                 }
             }
         }

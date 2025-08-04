@@ -1,6 +1,7 @@
 package com.jaamcoding.translatorapp.transalator
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,8 @@ import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
-fun TranslateView(vm: TranslateViewModel = TranslateViewModel()) {
+fun TranslateView(vm: TranslateViewModel = TranslateViewModel(), paddingValues: PaddingValues = PaddingValues()
+) {
 
     val state = vm.state
     val context = LocalContext.current
@@ -41,6 +43,7 @@ fun TranslateView(vm: TranslateViewModel = TranslateViewModel()) {
 
     Column(
         modifier = Modifier
+            .padding(paddingValues)
             .fillMaxSize()
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
