@@ -12,25 +12,43 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
 fun LanguagesView() {
 
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val dataStore = LanguagesStore(context)
+
+    val indexLang by dataStore.getIndexLang.collectAsState(initial = 0)
+
     val items = listOf("English", "Spanish")
     val languages = getStrings()
-    var currentLanguage by remember { mutableStateOf(languages[0]) }
+    var currentLanguage by remember { mutableStateOf(languages[indexLang]) }
+
+
+
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
+    LaunchedEffect(indexLang) { //se ejecuta cuando cambia el indexLang ya que al inicio siempre se ejecuta el remember primero
+        currentLanguage = languages[indexLang]
+        selectedIndex = indexLang
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -48,6 +66,9 @@ fun LanguagesView() {
                     DropdownMenuItem(text = { Text(text = item) }, onClick = {
                         selectedIndex = index
                         currentLanguage = languages[index]
+                        scope.launch {
+                            dataStore.saveIndexLang(index)
+                        }
                         expanded = false
                     })
                 }
